@@ -1,0 +1,112 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+
+.dark {
+  --background: oklch(0 0 0);
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-background: #0a0a0a;
+  --color-foreground: #ffffff;
+  --color-muted: #1a1a1a;
+  --color-accent: #3b82f6; /* Blue-500 */
+
+  --primary: #ffffff;
+  --background: var(--color-background);
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground font-sans antialiased transition-colors duration-300;
+  }
+}
+
+:root.light {
+  --color-background: #f8fafc; /* Slate-50 */
+  --color-foreground: #0f172a; /* Slate-900 */
+  --color-muted: #f1f5f9; /* Slate-100 */
+  --color-accent: #3b82f6;
+
+  --primary: #000000;
+  --background: var(--color-background);
+}
+
+:root.light .glass {
+  @apply bg-white/70 backdrop-blur-md border border-slate-200 shadow-sm;
+}
+
+:root.light .text-white\/60 {
+  @apply text-slate-600;
+}
+
+:root.light .text-white\/50 {
+  @apply text-slate-500;
+}
+
+:root.light .text-white\/40 {
+  @apply text-slate-400;
+}
+
+:root.light .text-white\/30 {
+  @apply text-slate-300;
+}
+
+:root.light .text-white\/20 {
+  @apply text-slate-200;
+}
+
+:root.light .bg-white\/5 {
+  @apply bg-slate-100;
+}
+
+:root.light .border-white\/10 {
+  @apply border-slate-200;
+}
+
+:root.light .hover\:bg-white\/5:hover {
+  @apply hover:bg-slate-100;
+}
+
+:root.light .hover\:bg-white\/10:hover {
+  @apply hover:bg-slate-200;
+}
+
+:root.light .bg-accent\/10 {
+  @apply bg-blue-100;
+}
+
+:root.light .border-accent\/20 {
+  @apply border-blue-200;
+}
+
+.glass {
+  @apply bg-white/5 backdrop-blur-md border border-white/10;
+}
+
+.glow-blue {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+}
