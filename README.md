@@ -1,6 +1,6 @@
-# SecureGC 2.0 🛡️
+# SecureGC 🛡️
 
-**SecureGC 2.0** is a professional, high-security ephemeral group chat application built with a **Zero-Knowledge Architecture**. It ensures that your conversations remain private, encrypted, and completely untraceable once the session ends.
+**SecureGC** is a professional, high-security ephemeral group chat application built with a **Zero-Knowledge Architecture**. It ensures that your conversations remain private, encrypted, and completely untraceable once the session ends.
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/React-18.x-61DAFB.svg)
@@ -49,7 +49,6 @@ The server acts as a simple WebSocket broadcaster. It receives encrypted payload
 3. **Configure Environment Variables**
    Create a `.env` file in the root directory:
    ```env
-   GEMINI_API_KEY=your_gemini_api_key_here
    PORT=3000
    ```
 
@@ -76,4 +75,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-*Built with privacy in mind. SecureGC 2.0 - It's the standard.*
+*Built with privacy in mind. SecureGC - It's the standard.*

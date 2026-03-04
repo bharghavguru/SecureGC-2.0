@@ -18,9 +18,9 @@ import {
   Menu,
   X,
   Moon,
-  Sun
+  Sun,
+  Github
 } from 'lucide-react';
-import { generateLogo } from './lib/logoGenerator';
 import { cn, formatDate } from './lib/utils';
 import { 
   generateRoomKey, 
@@ -42,6 +42,24 @@ import {
   NavbarButton
 } from "@/src/components/ui/resizable-navbar";
 
+function Logo({ className }: { className?: string }) {
+  return (
+    <div className={cn("flex items-center gap-2", className)}>
+      <div className="relative w-10 h-10 flex items-center justify-center">
+        <div className="absolute inset-0 bg-accent rounded-xl rotate-6 opacity-20 animate-pulse" />
+        <div className="absolute inset-0 bg-accent rounded-xl -rotate-3 opacity-20" />
+        <div className="relative w-8 h-8 bg-accent rounded-lg flex items-center justify-center glow-blue shadow-lg shadow-accent/20">
+          <Shield className="w-5 h-5 text-white" />
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-background" />
+        </div>
+      </div>
+      <span className="font-bold text-xl tracking-tighter text-foreground dark:text-white">
+        SECURE<span className="text-accent">GC</span>
+      </span>
+    </div>
+  );
+}
+
 export default function App() {
   const [view, setView] = useState<View>('home');
   const [room, setRoom] = useState<RoomInfo | null>(null);
@@ -54,25 +72,13 @@ export default function App() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchLogo = async () => {
-      try {
-        const url = await generateLogo();
-        setLogoUrl(url);
-      } catch (error) {
-        console.error('Failed to generate logo:', error);
-      }
-    };
-    fetchLogo();
-  }, []);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
   const [roomClosedBy, setRoomClosedBy] = useState<string | null>(null);
 
   const navItems = [
-    { name: 'About', link: '#about' },
-    { name: 'Portfolio', link: '#portfolio' },
+    { name: 'About', view: 'about' as View },
+    { name: 'Portfolio', link: 'https://github.com/gurubharghav' }, // Informal link to portfolio
   ];
 
   const userIdRef = useRef<string | null>(null);
@@ -95,6 +101,10 @@ export default function App() {
     document.documentElement.classList.toggle('light', theme === 'light');
     localStorage.setItem('theme', theme);
   }, [theme]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [view]);
 
   const handleCreateRoom = async (roomName: string, password?: string, username?: string) => {
     setIsLoading(true);
@@ -302,26 +312,12 @@ export default function App() {
         />
       )}
       {/* Header */}
-      {view === 'home' && (
+      {(view === 'home' || view === 'about') && (
         <Navbar>
           <NavBody>
             <NavbarLogo>
-              <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.location.reload()}>
-                {logoUrl ? (
-                  <img 
-                    src={logoUrl} 
-                    alt="SecureGC Logo" 
-                    className="h-10 w-auto"
-                    referrerPolicy="no-referrer"
-                  />
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center glow-blue">
-                      <Shield className="w-5 h-5 text-background" />
-                    </div>
-                    <span className="font-bold text-xl tracking-tight text-foreground dark:text-white">Secure<span className="text-accent">GC</span></span>
-                  </div>
-                )}
+              <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('home')}>
+                <Logo />
               </div>
             </NavbarLogo>
 
@@ -330,7 +326,8 @@ export default function App() {
                 {navItems.map((item) => (
                   <NavbarButton 
                     key={item.name} 
-                    href={item.link} 
+                    href={item.link}
+                    onClick={item.view ? () => setView(item.view!) : undefined}
                     variant="secondary"
                     className="px-4 py-2 h-auto text-sm uppercase tracking-wider font-bold"
                   >
@@ -350,22 +347,8 @@ export default function App() {
           <MobileNav>
             <MobileNavHeader>
               <NavbarLogo>
-                <div className="flex items-center gap-2 cursor-pointer" onClick={() => window.location.reload()}>
-                  {logoUrl ? (
-                    <img 
-                      src={logoUrl} 
-                      alt="SecureGC Logo" 
-                      className="h-8 w-auto"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center glow-blue">
-                        <Shield className="w-5 h-5 text-background" />
-                      </div>
-                      <span className="font-bold text-xl tracking-tight text-foreground dark:text-white">Secure<span className="text-accent">GC</span></span>
-                    </div>
-                  )}
+                <div className="flex items-center gap-2 cursor-pointer" onClick={() => setView('home')}>
+                  <Logo className="scale-90 origin-left" />
                 </div>
               </NavbarLogo>
               <div className="flex items-center gap-2">
@@ -373,7 +356,8 @@ export default function App() {
                   {navItems.map((item) => (
                     <NavbarButton 
                       key={item.name} 
-                      href={item.link} 
+                      href={item.link}
+                      onClick={item.view ? () => setView(item.view!) : undefined}
                       variant="secondary"
                       className="px-4 py-2 h-auto text-base uppercase tracking-wider font-bold !text-black dark:!text-white"
                     >
@@ -390,6 +374,7 @@ export default function App() {
       <main className="flex-1 flex flex-col relative overflow-hidden">
         <AnimatePresence mode="wait">
           {view === 'home' && <HomeView setView={setView} />}
+          {view === 'about' && <AboutView onBack={() => setView('home')} />}
           {view === 'create' && <CreateView onBack={() => setView('home')} onCreate={handleCreateRoom} isLoading={isLoading} />}
           {view === 'join' && <JoinView onBack={() => setView('home')} onJoin={handleJoinRoom} isLoading={isLoading} error={error} />}
           {view === 'success' && <SuccessView room={room!} onEnter={handleEnterCreatedRoom} isLoading={isLoading} />}
@@ -498,7 +483,7 @@ function HomeView({ setView }: { setView: (v: View) => void }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="max-w-4xl mx-auto px-6 py-12 sm:py-24 text-center"
+      className="max-w-4xl mx-auto px-6 py-12 sm:py-24 text-center relative z-10"
     >
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
@@ -574,6 +559,90 @@ function HomeView({ setView }: { setView: (v: View) => void }) {
             <h3 className="!text-black dark:!text-white font-bold mb-2">3. Blind Relay Architecture</h3>
             <p>The server acts as a simple WebSocket broadcaster. It receives encrypted payloads and sends them to all members of the room. It has no capability to decrypt the content.</p>
           </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function AboutView({ onBack }: { onBack: () => void }) {
+  return (
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      className="max-w-3xl mx-auto w-full px-6 py-12 sm:py-24"
+    >
+      <div className="glass p-8 sm:p-12 rounded-[2.5rem] relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+        
+        <button 
+          onClick={onBack}
+          className="mb-8 flex items-center gap-2 text-sm font-bold text-accent hover:underline"
+        >
+          <ArrowRight className="w-4 h-4 rotate-180" />
+          Back to Home
+        </button>
+
+        <h2 className="text-4xl sm:text-6xl font-bold tracking-tighter mb-8 !text-black dark:!text-white">
+          Hey, I'm <span className="text-accent">Gurubharghav</span>.
+        </h2>
+
+        <div className="space-y-6 text-lg !text-black/70 dark:!text-white/70 leading-relaxed">
+          <p>
+            Welcome to <span className="font-bold text-foreground dark:text-white">SecureGC</span>! 
+            I built this project because I'm deeply passionate about digital privacy and personal security. 
+            In a world where everything we say is logged, tracked, and sold, I wanted to create a space that's the exact opposite.
+          </p>
+
+          <p>
+            Think of this as a digital "cone of silence." I used the <span className="font-mono text-accent text-base">Web Crypto API</span> to make sure that your messages are encrypted right in your browser. 
+            The server? It's just a blind messenger. It passes along the scrambled data but has absolutely no clue what you're actually saying.
+          </p>
+
+          <div className="p-6 bg-accent/5 border border-accent/10 rounded-2xl my-8">
+            <h3 className="text-xl font-bold mb-3 !text-black dark:!text-white flex items-center gap-2">
+              <Zap className="w-5 h-5 text-accent" />
+              The "Vibe" of this Project
+            </h3>
+            <ul className="space-y-3 text-base">
+              <li className="flex gap-3">
+                <span className="text-accent font-bold">01.</span>
+                <span><span className="font-bold">Ephemeral:</span> Everything lives in RAM. Close the room, and it's gone. Poof.</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-accent font-bold">02.</span>
+                <span><span className="font-bold">Zero-Knowledge:</span> I don't want your data. I don't even have a database for messages.</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-accent font-bold">03.</span>
+                <span><span className="font-bold">Transparent & Open:</span> Crafted with React, Express, and a serious amount of late-night coding.</span>
+              </li>
+            </ul>
+          </div>
+
+          <p>
+            I hope you find this useful for those times when you just need a quick, secure place to talk without leaving a digital footprint. 
+            If you like what you see, feel free to check out my other stuff on my portfolio!
+          </p>
+        </div>
+
+        <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap gap-4">
+          <a 
+            href="https://github.com/gurubharghav" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="px-6 py-3 bg-foreground dark:bg-white text-background dark:text-black font-bold rounded-xl hover:opacity-90 transition-all flex items-center gap-2"
+          >
+            <Github className="w-5 h-5" />
+            My GitHub
+          </a>
+          <button 
+            onClick={onBack}
+            className="px-6 py-3 glass font-bold rounded-xl hover:bg-white/10 transition-all"
+          >
+            Start Chatting
+          </button>
         </div>
       </div>
     </motion.div>
@@ -885,6 +954,15 @@ function ChatView({
               ))}
             </div>
             <div className="p-6 border-t border-white/10 space-y-3">
+              {isAdmin && (
+                <button 
+                  onClick={onClose}
+                  className="w-full py-3 bg-red-500/10 text-red-500 border border-red-500/20 rounded-xl text-sm font-bold hover:bg-red-500/20 transition-all flex items-center justify-center gap-2"
+                >
+                  <X className="w-4 h-4" />
+                  Close Room
+                </button>
+              )}
               <button 
                 onClick={onLeave}
                 className="w-full py-3 glass rounded-xl text-sm font-bold hover:bg-white/10 transition-all flex items-center justify-center gap-2"
@@ -919,15 +997,6 @@ function ChatView({
           </div>
 
           <div className="flex items-center gap-2 flex-1 justify-end">
-            {isAdmin && (
-              <button 
-                onClick={onClose}
-                className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 text-red-500 border border-red-500/20 rounded-lg text-xs font-bold hover:bg-red-500/20 transition-all"
-              >
-                <X className="w-3.5 h-3.5" />
-                Close Room
-              </button>
-            )}
             <div className="hidden sm:flex items-center gap-1 px-2 py-1 rounded-md bg-white/5 border border-white/10">
               <Lock className="w-3 h-3 text-accent" />
               <span className="text-[10px] font-mono text-accent uppercase tracking-tighter">E2EE Active</span>

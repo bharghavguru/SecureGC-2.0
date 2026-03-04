@@ -1,4 +1,4 @@
-export type View = 'home' | 'create' | 'join' | 'success' | 'chat';
+export type View = 'home' | 'create' | 'join' | 'success' | 'chat' | 'about';
 
 export interface User {
   id: string;

@@ -1,5 +1,5 @@
 {
-  "name": "SecureGC-2.0",
+  "name": "SecureGC",
   "description": "Ephemeral E2E Encrypted Group Chat with Zero-Knowledge architecture.",
   "requestFramePermissions": []
 }
