@@ -78,7 +78,7 @@ export default function App() {
 
   const navItems = [
     { name: 'About', view: 'about' as View },
-    { name: 'Portfolio', link: 'https://github.com/gurubharghav' }, // Informal link to portfolio
+    { name: 'Portfolio', link: 'https://github.com/bharghavguru' }, // Informal link to portfolio
   ];
 
   const userIdRef = useRef<string | null>(null);
@@ -629,7 +629,7 @@ function AboutView({ onBack }: { onBack: () => void }) {
 
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-wrap gap-4">
           <a 
-            href="https://github.com/gurubharghav" 
+            href="https://github.com/bharghavguru" 
             target="_blank" 
             rel="noopener noreferrer"
             className="px-6 py-3 bg-foreground dark:bg-white text-background dark:text-black font-bold rounded-xl hover:opacity-90 transition-all flex items-center gap-2"
