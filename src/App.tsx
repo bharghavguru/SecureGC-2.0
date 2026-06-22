@@ -45,14 +45,7 @@ import {
 function Logo({ className }: { className?: string }) {
   return (
     <div className={cn("flex items-center gap-2", className)}>
-      <div className="relative w-10 h-10 flex items-center justify-center">
-        <div className="absolute inset-0 bg-accent rounded-xl rotate-6 opacity-20 animate-pulse" />
-        <div className="absolute inset-0 bg-accent rounded-xl -rotate-3 opacity-20" />
-        <div className="relative w-8 h-8 bg-accent rounded-lg flex items-center justify-center glow-blue shadow-lg shadow-accent/20">
-          <Shield className="w-5 h-5 text-white" />
-          <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-background" />
-        </div>
-      </div>
+      <img src="/logo.png" alt="SecureGC Logo" className="w-10 h-10 object-contain" />
       <span className="font-bold text-xl tracking-tighter text-foreground dark:text-white">
         SECURE<span className="text-accent">GC</span>
       </span>
