@@ -200,6 +200,9 @@ async function startServer() {
       }
     });
   });
+  app.get("/health", (_, res) => {
+  res.send("SecureGC is running!");
+});
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
