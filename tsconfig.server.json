@@ -6,19 +6,11 @@
     "outDir": "dist",
     "rootDir": ".",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "strict": false,
     "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "sourceMap": false,
-    "declaration": false,
     "types": ["node"]
   },
   "include": [
     "server.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
   ]
 }
