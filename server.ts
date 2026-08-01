@@ -3,6 +3,11 @@ import { createServer as createViteServer } from "vite";
 import { WebSocketServer, WebSocket } from "ws";
 import { createServer } from "http";
 import { v4 as uuidv4 } from "uuid";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 interface Room {
   id: string;
@@ -198,14 +203,21 @@ async function startServer() {
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    app.use(express.static("dist"));
-  }
+  const vite = await createViteServer({
+    server: { middlewareMode: true },
+    appType: "spa",
+  });
+
+  app.use(vite.middlewares);
+} else {
+  const clientPath = path.join(__dirname);
+
+  app.use(express.static(clientPath));
+
+  app.get("*", (_, res) => {
+    res.sendFile(path.join(clientPath, "index.html"));
+  });
+}
 
   server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
